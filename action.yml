@@ -1,0 +1,35 @@
+name: 'Merge JSON with template'
+description: 'Creates or updates a JSON file based on a template, missing keys'
+inputs:
+  source-file:
+    description: 'JSON Template that will be merged into the target file ($VAR/$(VAR) will be replaced without any substitution, $$ will become $)'
+    required: true
+  target-file:
+    description: 'JSON file to be merged'
+    required: true
+  source-path:
+    description: 'Path within the source file that will be copied from'
+    required: false
+    default: ''
+  target-path:
+    description: 'Path within the target file that will be pasted into (sibling paths remain unchanged)'
+    required: false
+    default: ''
+  skipped-source-paths:
+    description: 'Paths relative to the source path that will not be copied from (separated by newline and trimmed from surrounding whitespace, * to match all paths)'
+    required: false
+    default: ''
+  skipped-target-paths:
+    description: 'Paths relative to the target path that will be removed unless overridden by the source file (separated by newline and trimmed from surrounding whitespace, * to match all paths)'
+    required: false
+    default: ''
+  substitution-file:
+    description: 'A JSON file with values that will substitute $KEYS within the template, overrides the default replacement with environment variables'
+    required: false
+    default: ''
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+branding:
+  icon: 'edit'
+  color: 'gray-dark'
