@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/mpmxyz/merge-json-with-template/issues"
   },
-  "homepage": "https://github.com/mpmxyz/merge-json-with-template#readme"
+  "homepage": "https://github.com/mpmxyz/merge-json-with-template#readme",
+  "devDependencies": {
+    "eslint": "^8.54.0"
+  }
 }

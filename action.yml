@@ -23,6 +23,10 @@ inputs:
     description: 'Paths relative to the target path that will be removed unless overridden by the source file (separated by newline and trimmed from surrounding whitespace, * to match all paths)'
     required: false
     default: ''
+  appended-array-paths:
+    description: 'Paths relative to the source and target that will merge by appending instead of overwriting (separated by newline and trimmed from surrounding whitespace, * to match all paths)'
+    required: false
+    default: ''
   substitution-file:
     description: 'A JSON file with values that will substitute $KEYS within the template, overrides the default replacement with environment variables'
     required: false
