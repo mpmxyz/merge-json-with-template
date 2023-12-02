@@ -1,11 +1,14 @@
 
+export type PatternElement = (string|number)
+export type Pattern = PatternElement[]
+
 //semi-strict path parser, permits no whitespace between/within tokens and no double quotes
-let parsePath = function(path) {
+export function parsePath(path: string): undefined | Pattern {
     let fail = function () {
         return undefined
     }
 
-    let result = []
+    let result: Pattern = []
     let afterDot = false
     let first = true
     let tokens = [...path.matchAll(/\.|[^\.\[]+|\[[0-9]+\]|\["(?:[^"]|\\.)*"\]/g)].map(it => it[0])
@@ -13,8 +16,8 @@ let parsePath = function(path) {
     if (tokens.join('') != path) {
         return fail();
     }
-
-    for (let token of tokens) {
+    let token: PatternElement
+    for (token of tokens) {
         if (token == ".") {
             if (afterDot || first) {
                 return fail()
@@ -27,8 +30,11 @@ let parsePath = function(path) {
             }
             try {
                 token = JSON.parse(token.slice(1, -1))
+                if (typeof token != "string" && typeof token != "number") {
+                    return fail()
+                }
             } catch (e) {
-                return undefined
+                return fail()
             }
         } else {
             if (!afterDot && !first) {
@@ -45,7 +51,7 @@ let parsePath = function(path) {
     return result
 }
 
-let getPath = function(obj, parsedPath) {
+export function getPath(obj: any, parsedPath: Pattern) {
     for (const key of parsedPath) {
         if (typeof obj != "object") {
             return undefined
@@ -55,8 +61,7 @@ let getPath = function(obj, parsedPath) {
     return obj
 }
 
-let setPath = function (obj, path, value, forcePathType, i) {
-    i = i || 0
+export function setPath(obj: any, path: Pattern, value: any, forcePathType: boolean = false, i: number = 0) {
     if (i >= path.length) {
         return value
     }
@@ -72,7 +77,7 @@ let setPath = function (obj, path, value, forcePathType, i) {
     return obj
 }
 
-let matchPath = function(matchedPath, patternPath) {
+export function matchPath(matchedPath: Pattern, patternPath: Pattern) {
     if (matchedPath.length != patternPath.length) {
         return false
     }
@@ -86,13 +91,12 @@ let matchPath = function(matchedPath, patternPath) {
     return true
 }
 
-let stripMatchingElements = function(obj, patterns, pathStack) {
-    pathStack = pathStack || []
+export function stripMatchingElements(obj: any, patterns: Pattern[], pathStack: string[] = []) {
     if (patterns.some(pattern => matchPath(pathStack, pattern))) {
         return undefined
     }
     if (typeof (obj) == "object") {
-        const newArray = []
+        const newArray: string[] = []
         for (const key in obj) {
             pathStack.push(key)
             const newValue = stripMatchingElements(obj[key], patterns, pathStack)
@@ -105,7 +109,7 @@ let stripMatchingElements = function(obj, patterns, pathStack) {
                     obj[key] = newValue
                 }
             }
-            pathStack.pop(key)
+            pathStack.pop()
         }
         if (Array.isArray(obj)) {
             obj = newArray
@@ -114,9 +118,8 @@ let stripMatchingElements = function(obj, patterns, pathStack) {
     return obj
 }
 
-let merge = function (target, source, arraysToAppend, pathStack) {
-    pathStack = pathStack || []
-    if (source == undefined) {
+export function merge(target: any, source: any, arraysToAppend: Pattern[] = [], pathStack: string[] = []) {
+    if (source === undefined) {
         return target
     }
     if (typeof target != "object" || typeof source != "object" || Array.isArray(target) != Array.isArray(source)) {
@@ -130,17 +133,24 @@ let merge = function (target, source, arraysToAppend, pathStack) {
         for (const key in source) {
             pathStack.push(key)
             target[key] = merge(target[key], source[key], arraysToAppend, pathStack)
-            pathStack.pop(key)
+            pathStack.pop()
         }
     }
     return target
 }
 
-module.exports = {
-    parsePath: parsePath,
-    getPath: getPath,
-    setPath: setPath,
-    matchPath: matchPath,
-    stripMatchingElements: stripMatchingElements,
-    merge: merge
+export function applyTemplate(template: string, replacer: (key: string) => string): string {
+    return template.replaceAll(/\$\$|\$\w+|\$\((?:[^\)\$]|\$.)+\)/g, (match) => {
+        let key: string
+        if (match == "$$") {
+            return "$"
+        } else if (match.startsWith("$(")) {
+            key = match.slice(2, -1)
+            key.replace(/\$(.)/g, "$1")
+        } else {
+            key = match.slice(1)
+        }
+
+        return replacer(key)
+    })
 }
