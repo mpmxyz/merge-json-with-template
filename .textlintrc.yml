@@ -1,3 +1,4 @@
 rules:
   terminology:
-    severity: warning
+    exclude:
+    - "he or she"
