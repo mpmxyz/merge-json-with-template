@@ -14,6 +14,7 @@ The source JSON file is read as a template:
 - `$$` becomes `$`
 
 It is also possible to supply more replacements within another JSON file.
+(contents override environment variables with the same name)
 
 ## Usage
 
@@ -48,18 +49,19 @@ jobs:
 
 ## Inputs
 
-| Input                  | Default | Description                     |
-| ---------------------- | ------- | ------------------------------- |
-| `source-file`          | N/A | _template_ that will be merged into the target<br>(JSON file template) |
-| `target-file`          | N/A | Target to be merged into<br>(JSON file)|
-| `substitution-file`    | ``  | values that can be inserted into the template<br>(optional, overrides environment variables) |
-| `source-path`          | ``  | Part of source to be copied from when merging<br>(optional, single-line path) |
-| `target-path`          | ``  | Part of target to be pasted into when merging<br>(optional, single-line path) |
-| `skipped-source-paths` | ``  | Parts of source to be removed before merging<br>(optional, multi-line path, relative to `source-path`)|
-| `skipped-target-paths` | ``  | Parts of target to be removed before merging<br>(optional, multi-line path, relative to `target-path`)|
-| `appended-array-paths` | ``  | Arrays to be merged by appending the new values<br>(optional, multi-line path, relative to merging)|
+| Input                  | Default | Description                                |
+| ---------------------- | ------- | ------------------------------------------ |
+| `source-file`          | N/A | _template_ that will be merged into the target |
+| `target-file`          | N/A | Target to merge into, created if missing       |
+| `substitution-file`    | ``  | values that can be inserted into the template  |
+| `source-path`          | ``  | Part of source to be copied from when merging  |
+| `target-path`          | ``  | Part of target to be pasted into when merging  |
+| `skipped-source-paths` | ``  | Parts of source to be removed before merging   |
+| `skipped-target-paths` | ``  | Parts of target to be removed before merging   |
+| `appended-array-paths` | ``  | Arrays to be merged by appending the values    |
 
 Contents will be merged recursively relative to `source-path`/`target-path`.
+All other paths are relative to the merging root.
 Only arrays can be merged with arrays and only objects with objects.
 All other elements will just be replaced.
 
@@ -71,7 +73,7 @@ A few example paths:
 - `[0].x` (array index `0` then object key `x`)
 - `["\""]` (use double quotes to match non-standard keys)
 
-Multi-line paths also allow globbing:
+Multi-line path*s* also allow globbing:
 
 - `*` (matches all direct keys of an object or array)
 - `[0].*.x` (matches all `x`-properties of the values within the first array entries)

@@ -1,0 +1,3 @@
+rules:
+  terminology:
+    severity: warning
