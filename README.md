@@ -7,7 +7,12 @@
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
 This actions merges two JSON files together. (source is merged into target)
-The source JSON file is read as a template. (e.g. `$VAR` or `$(VAR)` will be replaced by the value of the environment variable `VAR`. `$$` becomes `$`)
+
+The source JSON file is read as a template:
+
+- `$VAR` or `$(VAR)` will be replaced by the value of the environment variable `VAR`.
+- `$$` becomes `$`
+
 It is also possible to supply more replacements within another JSON file.
 
 ## Usage
@@ -59,6 +64,7 @@ Only arrays can be merged with arrays and only objects with objects.
 All other elements will just be replaced.
 
 A few example paths:
+
 - `` (empty path)
 - `abc`
 - `abc.def`
@@ -66,6 +72,7 @@ A few example paths:
 - `["\""]` (use double quotes to match non-standard keys)
 
 Multi-line paths also allow globbing:
+
 - `*` (matches all direct keys of an object or array)
 - `[0].*.x` (matches all `x`-properties of the values within the first array entries)
 
