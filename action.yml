@@ -1,5 +1,11 @@
 name: 'Merge JSON with template'
 description: 'Creates or updates a JSON file based on a template, missing keys'
+author: 'mpmxyz'
+
+branding:
+  icon: 'edit'
+  color: 'gray-dark'
+
 inputs:
   source-file:
     description: 'JSON Template that will be merged into the target file ($VAR/$(VAR) will be replaced without any substitution, $$ will become $)'
@@ -31,9 +37,8 @@ inputs:
     description: 'A JSON file with values that will substitute $KEYS within the template, overrides the default replacement with environment variables'
     required: false
     default: ''
+
 runs:
   using: 'node20'
   main: 'dist/index.js'
-branding:
-  icon: 'edit'
-  color: 'gray-dark'
+
