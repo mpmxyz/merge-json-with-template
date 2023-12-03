@@ -1,5 +1,5 @@
 name: 'Merge JSON with template'
-description: 'Creates or updates a JSON file based on a template, missing keys'
+description: 'Creates or updates a JSON file based on a template'
 author: 'mpmxyz'
 
 branding:
