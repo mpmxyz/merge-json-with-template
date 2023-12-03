@@ -55,8 +55,8 @@ jobs:
         id: test-action
         uses: ./
         with:
-          milliseconds: 2000
-
-      - name: Print Output
+          source-file: "samples/b.json"
+          target-file: "samples/a.json"
+      - name: Check result
         id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+        run: diff "samples/a.json" "samples/ab.json"
