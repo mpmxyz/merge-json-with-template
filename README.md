@@ -50,14 +50,14 @@ jobs:
 
 | Input                  | Default | Description                     |
 | ---------------------- | ------- | ------------------------------- |
-| `source-file`          | N/A | JSON file _template_ that will be merged into the target |
-| `target-file`          | N/A | Target JSON file that will will be merged into |
-| `substitution-file`    | ``  | JSON File with values that can be inserted into the template, (optional, overrides environment variables) |
-| `source-path`          | ``  | Part of source that will be copied from when merging. (optional, single-line path) |
-| `target-path`          | ``  | Part of target that will be pasted into when merging. (optional, single-line path) |
-| `skipped-source-paths` | ``  | Parts of source that should be removed before merging (optional, multi-line path, relative to `source-path`)|
-| `skipped-target-paths` | ``  | Parts of target that should be removed before merging (optional, multi-line path, relative to `target-path`)|
-| `appended-array-paths` | ``  | Arrays that should be merged by appending new values instead of overwriting the first elements (optional, multi-line path, relative to merging)|
+| `source-file`          | N/A | _template_ that will be merged into the target<br>(JSON file template) |
+| `target-file`          | N/A | Target to be merged into<br>(JSON file)|
+| `substitution-file`    | ``  | values that can be inserted into the template<br>(optional, overrides environment variables) |
+| `source-path`          | ``  | Part of source to be copied from when merging<br>(optional, single-line path) |
+| `target-path`          | ``  | Part of target to be pasted into when merging<br>(optional, single-line path) |
+| `skipped-source-paths` | ``  | Parts of source to be removed before merging<br>(optional, multi-line path, relative to `source-path`)|
+| `skipped-target-paths` | ``  | Parts of target to be removed before merging<br>(optional, multi-line path, relative to `target-path`)|
+| `appended-array-paths` | ``  | Arrays to be merged by appending the new values<br>(optional, multi-line path, relative to merging)|
 
 Contents will be merged recursively relative to `source-path`/`target-path`.
 Only arrays can be merged with arrays and only objects with objects.
@@ -76,7 +76,7 @@ Multi-line paths also allow globbing:
 - `*` (matches all direct keys of an object or array)
 - `[0].*.x` (matches all `x`-properties of the values within the first array entries)
 
-Paths can also be used in the template file to access values deep within the substitution file:
+Paths within the template allow access to values within the substitution file:
 `$(some.path.within["substitution-file"])`
 
 ## Outputs
